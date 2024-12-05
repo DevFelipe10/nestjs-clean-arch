@@ -1,4 +1,4 @@
-import { Entity } from '@/shared/domain/entity'
+import { Entity } from '@/shared/domain/entites/entity'
 import { UserValidatorFactory } from '../validators/user.validator'
 import { EntityValidationError } from '@/shared/domain/errors/validation-error'
 
