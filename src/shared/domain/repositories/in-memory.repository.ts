@@ -45,7 +45,7 @@ export abstract class InMemoryRepository<E extends Entity>
     const _id = `${id}`
     const entityId = this.items.findIndex(entity => entity.id === _id)
 
-    if (!entityId) throw new NotFoundError('Entity not found')
+    if (entityId === -1) throw new NotFoundError('Entity not found')
 
     return entityId
   }
