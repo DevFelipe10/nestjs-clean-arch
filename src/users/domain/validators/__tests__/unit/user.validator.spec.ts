@@ -4,16 +4,18 @@ import {
   UserValidator,
   UserValidatorFactory,
 } from '../../user.validator'
+import { UserProps } from '@/users/domain/entities/user.entity'
 
 let sut: UserValidator
+let props: UserProps
 
 describe('UserValidator unit tests', () => {
   beforeEach(() => {
     sut = UserValidatorFactory.create()
+    props = UserDataBuilder({})
   })
 
   it('valid case for user validator class', () => {
-    const props = UserDataBuilder({})
     const isValid = sut.validate(props)
 
     expect(isValid).toBeTruthy()
@@ -31,7 +33,7 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         name: '' as any,
       })
 
@@ -39,7 +41,7 @@ describe('UserValidator unit tests', () => {
       expect(sut.errors['name']).toStrictEqual(['name should not be empty'])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         name: 2 as any,
       })
 
@@ -50,7 +52,7 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         name: 'a'.repeat(256) as any,
       })
 
@@ -73,7 +75,7 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         email: '' as any,
       })
 
@@ -84,7 +86,7 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         email: 5 as any,
       })
 
@@ -96,7 +98,7 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         email: 'a'.repeat(256) as any,
       })
 
@@ -119,7 +121,7 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         password: '' as any,
       })
 
@@ -129,7 +131,7 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         password: 2 as any,
       })
 
@@ -140,13 +142,29 @@ describe('UserValidator unit tests', () => {
       ])
 
       isValid = sut.validate({
-        ...UserDataBuilder({}),
+        ...props,
         password: 'a'.repeat(256) as any,
       })
 
       expect(isValid).toBeFalsy()
       expect(sut.errors['password']).toStrictEqual([
         'password must be shorter than or equal to 100 characters',
+      ])
+    })
+  })
+
+  describe('CreatedAt field', () => {
+    it('Invalidation cases for createdAt field', () => {
+      let isValid = sut.validate({ ...props, createdAt: 16 as any })
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance',
+      ])
+
+      isValid = sut.validate({ ...props, createdAt: '2023' as any })
+      expect(isValid).toBeFalsy()
+      expect(sut.errors['createdAt']).toStrictEqual([
+        'createdAt must be a Date instance',
       ])
     })
   })
