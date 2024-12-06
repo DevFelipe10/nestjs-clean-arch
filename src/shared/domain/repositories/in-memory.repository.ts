@@ -10,12 +10,15 @@ export abstract class InMemoryRepository<E extends Entity>
   async findAll(): Promise<E[]> {
     return this.items
   }
+
   async findById(id: string): Promise<E> {
     return this._get(id)
   }
+
   async insert(entity: E): Promise<void> {
     this.items.push(entity)
   }
+
   async update(entity: E): Promise<void> {
     await this._get(entity.id)
 
