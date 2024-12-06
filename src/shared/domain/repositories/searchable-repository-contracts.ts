@@ -50,6 +50,7 @@ export class SearchResult<E extends Entity, Filter = string> {
       perPage: this.perPage,
       lastPage: this.lastPage,
       sort: this.sort,
+      sortDir: this.sortDir,
       filter: this.filter,
     }
   }
@@ -132,8 +133,9 @@ export class SearchParams {
 
 export interface SearchableRepositoryInterface<
   E extends Entity,
-  SearchParams,
-  SearchOutput,
+  Filter = string,
+  SearchInput = SearchParams,
+  SearchOutput = SearchResult<E, Filter>,
 > extends RepositoryInterface<E> {
-  search(props: SearchParams): Promise<SearchOutput>
+  search(props: SearchInput): Promise<SearchOutput>
 }
