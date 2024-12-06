@@ -18,12 +18,12 @@ export class SearchParams {
   protected _sortDir: SortDirection | null
   protected _filter: string | null
 
-  constructor(props: SearchProps) {
-    this._page = props.page
-    this._perPage = props.perPage
-    this._sort = props.sort
-    this._sortDir = props.sortDir
-    this._filter = props.filter
+  constructor(props: SearchProps = {}) {
+    this.page = props.page
+    this.perPage = props.perPage
+    this.sort = props.sort
+    this.sortDir = props.sortDir
+    this.filter = props.filter
   }
 
   get page() {
@@ -35,7 +35,7 @@ export class SearchParams {
     if (Number.isNaN(_page) || _page <= 0 || parseInt(_page as any) !== _page) {
       _page = 1
     }
-    this.page = _page
+    this._page = _page
   }
 
   get perPage() {
@@ -43,15 +43,15 @@ export class SearchParams {
   }
 
   private set perPage(value: number) {
-    let _perPage = +value
+    let _perPage = value === (true as any) ? this._perPage : +value
     if (
       Number.isNaN(_perPage) ||
       _perPage <= 0 ||
       parseInt(_perPage as any) !== _perPage
     ) {
-      _perPage = 1
+      _perPage = this._perPage
     }
-    this.page = _perPage
+    this._perPage = _perPage
   }
 
   get sort() {
@@ -59,7 +59,7 @@ export class SearchParams {
   }
 
   private set sort(value: string | null) {
-    this.sort =
+    this._sort =
       value === null || value === undefined || value === '' ? null : `${value}`
   }
 
@@ -69,11 +69,11 @@ export class SearchParams {
 
   private set sortDir(value: SortDirection | null) {
     if (!this.sort) {
-      this.sortDir = null
+      this._sortDir = null
       return
     }
     const dir = `${value}`.toLowerCase()
-    this.sortDir = dir !== 'asc' && dir !== 'desc' ? 'desc' : dir
+    this._sortDir = dir !== 'asc' && dir !== 'desc' ? 'desc' : dir
   }
 
   get filter() {
@@ -81,7 +81,7 @@ export class SearchParams {
   }
 
   private set filter(value: string | null) {
-    this.filter =
+    this._filter =
       value === null || value === undefined || value === '' ? null : `${value}`
   }
 }
